@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haksul/db.dart';
 import 'package:haksul/screens/searchpage.dart';
 
 class HaksulHomePage extends StatefulWidget {
@@ -9,6 +10,12 @@ class HaksulHomePage extends StatefulWidget {
 }
 
 class _HaksulHomePageState extends State<HaksulHomePage> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  final Future<List<ReportModel>> _popularReports =
+      MongoDatabase.getPopularReports();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,35 +28,111 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(19, 30, 73, 0.9),
+        backgroundColor: const Color(0xFF193073),
         foregroundColor: Colors.white,
         elevation: 2,
       ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            Image.asset("assets/menubar_logo.png"),
+            const SizedBox(
+              height: 20,
+            ),
+            const MenuItem(
+              icon: Icons.search_rounded,
+              title: "검색",
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                "2024 경희고등학교 학술제",
-                style: TextStyle(
-                  fontFamily: "NanumBarunGothic",
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        "assets/kyunghee.png",
+                        scale: 3.5,
+                      ),
+                      Transform.translate(
+                        offset: const Offset(-20, 0),
+                        child: const Text(
+                          "2024 경희고등학교 학술제",
+                          style: TextStyle(
+                            fontFamily: "NanumBarunGothic",
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Image.asset("assets/kyunghee.png"),
-              const SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  height: 250,
+                  child: Stack(
+                    children: [
+                      PageView(
+                        controller: _pageController,
+                        onPageChanged: (int page) {
+                          setState(() {
+                            _currentPage = page;
+                          });
+                        },
+                        children: [
+                          buildBanner('Banner 1', 0),
+                          buildBanner('Banner 2', 1),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (int i = 0; i < 2; i++)
+                                Container(
+                                  margin: const EdgeInsets.all(4.0),
+                                  width: 12.0,
+                                  height: 12.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _currentPage == i
+                                        ? Colors.grey
+                                        : Colors.grey.withOpacity(0.5),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Column(
                   children: [
                     const Row(
                       children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.search,
+                        ),
                         SizedBox(
                           width: 10,
                         ),
@@ -61,10 +144,6 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Icon(Icons.search),
                       ],
                     ),
                     Container(
@@ -97,11 +176,145 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
                     ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 30,
+                ),
+                Column(
+                  children: [
+                    const Row(
+                      children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(Icons.article_outlined),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "인기 보고서",
+                          style: TextStyle(
+                            fontFamily: "NanumSquare",
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 300,
+                      child: FutureBuilder(
+                          future: _popularReports,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Scrollbar(
+                                    radius: const Radius.circular(10),
+                                    child: ListView.separated(
+                                      itemCount: 10,
+                                      itemBuilder: (context, index) {
+                                        ReportModel report =
+                                            snapshot.data![index];
+
+                                        return SizedBox(
+                                          height: 46,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: 30,
+                                                  child: Text(
+                                                    "${index + 1}",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          "NanumSquareRound",
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 25,
+                                                      color: Colors.blue[900],
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Flexible(
+                                                  child: Text(
+                                                    report.title,
+                                                    style: const TextStyle(
+                                                      fontFamily:
+                                                          "NanumBarunGothic",
+                                                      fontSize: 23,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          const Divider(
+                                        thickness: 0.3,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class MenuItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  const MenuItem({
+    super.key,
+    required this.icon,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(
+        icon,
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 25,
+          fontFamily: "NanumSquare",
+        ),
+      ),
+      onTap: () {/**추후 수정 */},
     );
   }
 }
@@ -154,7 +367,7 @@ class SearchByButton extends StatelessWidget {
               child: Text(
                 text,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 23,
                   fontFamily: "NanumBarunGothic",
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -166,4 +379,20 @@ class SearchByButton extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget buildBanner(String text, int index) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(30.0),
+      color: Colors.blueGrey[100],
+    ),
+    child: Center(
+        child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 30,
+      ),
+    )),
+  );
 }
