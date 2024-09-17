@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haksul/db.dart';
-import 'package:haksul/screens/searchpage.dart';
+import 'package:haksul/components.dart';
 
 class HaksulHomePage extends StatefulWidget {
   const HaksulHomePage({super.key});
@@ -19,19 +19,7 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "2024 경희고등학교 학술제",
-          style: TextStyle(
-            fontSize: 20,
-            fontFamily: "NanumBarunGothic",
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF193073),
-        foregroundColor: Colors.white,
-        elevation: 2,
-      ),
+      appBar: commonAppBar("2024 경희고등학교 학술제"),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -43,6 +31,14 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
               icon: Icons.search_rounded,
               title: "검색",
             ),
+            const MenuItem(
+              icon: Icons.domain_rounded,
+              title: "학교 구조",
+            ),
+            const MenuItem(
+              icon: Icons.map_rounded,
+              title: "오시는 길",
+            )
           ],
         ),
       ),
@@ -223,47 +219,9 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
                                         ReportModel report =
                                             snapshot.data![index];
 
-                                        return SizedBox(
-                                          height: 46,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                SizedBox(
-                                                  width: 35,
-                                                  child: Text(
-                                                    "${index + 1}",
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          "NanumSquareRound",
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 25,
-                                                      color: Colors.blue[900],
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Flexible(
-                                                  child: Text(
-                                                    report.title,
-                                                    style: const TextStyle(
-                                                      fontFamily:
-                                                          "NanumBarunGothic",
-                                                      fontSize: 23,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                        return PopularReportListItem(
+                                          report: report,
+                                          index: index,
                                         );
                                       },
                                       separatorBuilder: (context, index) =>
@@ -290,110 +248,4 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
       ),
     );
   }
-}
-
-class MenuItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  const MenuItem({
-    super.key,
-    required this.icon,
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        icon,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 25,
-          fontFamily: "NanumSquare",
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      onTap: () {/**추후 수정 */},
-    );
-  }
-}
-
-class SearchByButton extends StatelessWidget {
-  final dynamic icon;
-  final String text, searchBy;
-  const SearchByButton({
-    super.key,
-    required this.icon,
-    required this.text,
-    required this.searchBy,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(),
-      child: Column(
-        children: [
-          Transform.translate(
-            offset: const Offset(0, 5),
-            child: IconButton(
-              onPressed: () => {
-                Navigator.of(context).pushNamed(
-                  "/search",
-                  arguments: SearchArguments(
-                    searchBy: searchBy,
-                  ),
-                )
-              },
-              icon: Icon(
-                icon,
-                size: 50,
-              ),
-            ),
-          ),
-          Transform.translate(
-            offset: const Offset(0, -5),
-            child: TextButton(
-              style: const ButtonStyle(),
-              onPressed: () => {
-                Navigator.of(context).pushNamed(
-                  "/search",
-                  arguments: SearchArguments(
-                    searchBy: searchBy,
-                  ),
-                )
-              },
-              child: Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 23,
-                  fontFamily: "NanumBarunGothic",
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Widget buildBanner(String text, int index) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(30.0),
-      color: Colors.blueGrey[100],
-    ),
-    child: Center(
-        child: Text(
-      text,
-      style: const TextStyle(
-        fontSize: 30,
-      ),
-    )),
-  );
 }
