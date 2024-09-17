@@ -62,12 +62,12 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
                         scale: 3.5,
                       ),
                       Transform.translate(
-                        offset: const Offset(-20, 0),
+                        offset: const Offset(-15, 0),
                         child: const Text(
                           "2024 경희고등학교 학술제",
                           style: TextStyle(
                             fontFamily: "NanumBarunGothic",
-                            fontSize: 30,
+                            fontSize: 25,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -230,7 +230,7 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
                                             child: Row(
                                               children: [
                                                 SizedBox(
-                                                  width: 30,
+                                                  width: 35,
                                                   child: Text(
                                                     "${index + 1}",
                                                     style: TextStyle(
@@ -312,6 +312,7 @@ class MenuItem extends StatelessWidget {
         style: const TextStyle(
           fontSize: 25,
           fontFamily: "NanumSquare",
+          fontWeight: FontWeight.bold,
         ),
       ),
       onTap: () {/**추후 수정 */},

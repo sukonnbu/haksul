@@ -6,7 +6,6 @@ import 'package:haksul/screens/searchpage.dart';
 Future<void> main() async {
   await MongoDatabase.connect();
   runApp(const MyApp());
-  await MongoDatabase.close();
 }
 
 class MyApp extends StatelessWidget {
