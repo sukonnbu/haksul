@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:haksul/db.dart';
+import 'package:haksul/screens/directions.dart';
 import 'package:haksul/screens/homepage.dart';
+import 'package:haksul/screens/schoolstructure.dart';
 import 'package:haksul/screens/searchpage.dart';
 
 Future<void> main() async {
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
       home: const HaksulHomePage(),
       routes: {
         "/search": (context) => const SearchPage(),
+        "/schoolstructure": (context) => const SchoolStructurePage(),
+        "/directions": (context) => const DirectionsPage(),
       },
     );
   }

@@ -1,17 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:haksul/components.dart';
 
-class SearchPage extends StatelessWidget {
+final List<String> searchByList = <String>["사람", "주제", "장소"];
+
+class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as SearchArguments;
+  State<SearchPage> createState() => _SearchPageState();
+}
 
+class _SearchPageState extends State<SearchPage> {
+  String searchByValue = searchByList.first;
+
+  @override
+  Widget build(BuildContext context) {
+    if (ModalRoute.of(context)!.settings.arguments != null) {
+      final args =
+          ModalRoute.of(context)!.settings.arguments as SearchArguments;
+      searchByValue = args.searchBy;
+    }
     return Scaffold(
       appBar: commonAppBar("학술 보고서 검색"),
-      body: Center(
-        child: Text(args.searchBy),
+      drawer: const DrawerMenu(),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            children: [
+              DropdownButton<String>(
+                value: searchByValue,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    searchByValue = newValue!;
+                  });
+                },
+                items:
+                    searchByList.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                padding: const EdgeInsets.all(8.0),
+              ),
+              const Expanded(
+                child: TextField(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

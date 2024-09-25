@@ -5,10 +5,12 @@ import 'package:haksul/screens/searchpage.dart';
 class MenuItem extends StatelessWidget {
   final IconData icon;
   final String title;
+  final Function() onClick;
   const MenuItem({
     super.key,
     required this.icon,
     required this.title,
+    required this.onClick,
   });
 
   @override
@@ -25,7 +27,7 @@ class MenuItem extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      onTap: () {/**추후 수정 */},
+      onTap: onClick,
     );
   }
 }
@@ -165,4 +167,89 @@ class PopularReportListItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class DrawerMenu extends StatelessWidget {
+  const DrawerMenu({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          Image.asset("assets/menubar_logo.png"),
+          const SizedBox(
+            height: 20,
+          ),
+          MenuItem(
+              icon: Icons.home_rounded,
+              title: "홈",
+              onClick: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }),
+          MenuItem(
+            icon: Icons.search_rounded,
+            title: "검색",
+            onClick: () {
+              Navigator.of(context).pushNamed("/search");
+            },
+          ),
+          MenuItem(
+            icon: Icons.domain_rounded,
+            title: "학교 구조",
+            onClick: () {
+              Navigator.of(context).pushNamed("/schoolstructure");
+            },
+          ),
+          MenuItem(
+            icon: Icons.map_rounded,
+            title: "오시는 길",
+            onClick: () {
+              Navigator.of(context).pushNamed("/directions");
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+TableRow routeTableRow({required String by, required String route}) {
+  return TableRow(
+    children: [
+      TableCell(
+        verticalAlignment: TableCellVerticalAlignment.middle,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            by,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: "NanumSquareRound",
+              fontSize: 19,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      TableCell(
+        verticalAlignment: TableCellVerticalAlignment.middle,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            route,
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              fontFamily: "NanumSquareRound",
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              overflow: TextOverflow.clip,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
 }

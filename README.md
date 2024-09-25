@@ -1,16 +1,7 @@
-# haksul
+# 2024 학술제 학술 보고서 검색 프로그램
 
-A new Flutter project.
+학술제에 출제된 학술 보고서를 탐색할 수 있는 웹/앱 프로그램
 
-## Getting Started
+## 사용 방법
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 제작기

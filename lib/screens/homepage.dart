@@ -20,28 +20,7 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonAppBar("2024 경희고등학교 학술제"),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            Image.asset("assets/menubar_logo.png"),
-            const SizedBox(
-              height: 20,
-            ),
-            const MenuItem(
-              icon: Icons.search_rounded,
-              title: "검색",
-            ),
-            const MenuItem(
-              icon: Icons.domain_rounded,
-              title: "학교 구조",
-            ),
-            const MenuItem(
-              icon: Icons.map_rounded,
-              title: "오시는 길",
-            )
-          ],
-        ),
-      ),
+      drawer: const DrawerMenu(),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -155,17 +134,17 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
                           SearchByButton(
                             icon: Icons.person_rounded,
                             text: "사람",
-                            searchBy: "person",
+                            searchBy: "사람",
                           ),
                           SearchByButton(
                             icon: Icons.subject_rounded,
                             text: "주제",
-                            searchBy: "subject",
+                            searchBy: "주제",
                           ),
                           SearchByButton(
                             icon: Icons.place,
                             text: "장소",
-                            searchBy: "place",
+                            searchBy: "장소",
                           ),
                         ],
                       ),
@@ -199,45 +178,46 @@ class _HaksulHomePageState extends State<HaksulHomePage> {
                     SizedBox(
                       height: 300,
                       child: FutureBuilder(
-                          future: _popularReports,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
+                        future: _popularReports,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 2,
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Scrollbar(
-                                    radius: const Radius.circular(10),
-                                    child: ListView.separated(
-                                      itemCount: 10,
-                                      itemBuilder: (context, index) {
-                                        ReportModel report =
-                                            snapshot.data![index];
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Scrollbar(
+                                  radius: const Radius.circular(10),
+                                  child: ListView.separated(
+                                    itemCount: 10,
+                                    itemBuilder: (context, index) {
+                                      ReportModel report =
+                                          snapshot.data![index];
 
-                                        return PopularReportListItem(
-                                          report: report,
-                                          index: index,
-                                        );
-                                      },
-                                      separatorBuilder: (context, index) =>
-                                          const Divider(
-                                        thickness: 0.3,
-                                      ),
+                                      return PopularReportListItem(
+                                        report: report,
+                                        index: index,
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) =>
+                                        const Divider(
+                                      thickness: 0.3,
                                     ),
                                   ),
                                 ),
-                              );
-                            } else {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          }),
+                              ),
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
