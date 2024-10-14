@@ -1,6 +1,6 @@
-import "package:flutter/material.dart";
+import 'package:go_router/go_router.dart';
 import 'package:haksul/db.dart';
-import 'package:haksul/screens/searchpage.dart';
+import "package:flutter/material.dart";
 
 class MenuItem extends StatelessWidget {
   final IconData icon;
@@ -51,8 +51,7 @@ class SearchByButton extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () {
-            Navigator.of(context).pushNamed("/search",
-                arguments: SearchArguments(searchBy: searchBy));
+            context.go("/$searchBy");
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -184,30 +183,31 @@ class DrawerMenu extends StatelessWidget {
             height: 20,
           ),
           MenuItem(
-              icon: Icons.home_rounded,
-              title: "홈",
-              onClick: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              }),
+            icon: Icons.home_rounded,
+            title: "홈",
+            onClick: () {
+              context.replace("/");
+            },
+          ),
           MenuItem(
             icon: Icons.search_rounded,
             title: "검색",
             onClick: () {
-              Navigator.of(context).pushNamed("/search");
+              context.go("/search");
             },
           ),
           MenuItem(
             icon: Icons.domain_rounded,
             title: "학교 구조",
             onClick: () {
-              Navigator.of(context).pushNamed("/schoolstructure");
+              context.go("/schoolstructure");
             },
           ),
           MenuItem(
             icon: Icons.map_rounded,
             title: "오시는 길",
             onClick: () {
-              Navigator.of(context).pushNamed("/directions");
+              context.go("/directions");
             },
           )
         ],

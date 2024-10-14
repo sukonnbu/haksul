@@ -15,11 +15,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (ModalRoute.of(context)!.settings.arguments != null) {
-      final args =
-          ModalRoute.of(context)!.settings.arguments as SearchArguments;
-      searchByValue = args.searchBy;
-    }
     return Scaffold(
       appBar: commonAppBar("학술 보고서 검색"),
       drawer: const DrawerMenu(),
